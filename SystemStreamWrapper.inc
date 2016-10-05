@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Drupal system stream wrapper abstract class.
+ * Backdrop system stream wrapper abstract class.
  */
-abstract class SystemStreamWrapper extends DrupalLocalStreamWrapper {
+abstract class SystemStreamWrapper extends BackdropLocalStreamWrapper {
 
   /**
    * Get the module, theme, or profile name of the current URI.
@@ -58,11 +58,11 @@ abstract class SystemStreamWrapper extends DrupalLocalStreamWrapper {
     }
 
     $path = str_replace('\\', '/', $this->getTarget());
-    return $GLOBALS['base_url'] . '/' . $dir . '/' . drupal_encode_path($path);
+    return $GLOBALS['base_url'] . '/' . $dir . '/' . backdrop_encode_path($path);
   }
 
   /**
-   * DrupalStreamWrapperInterface requires that these methods be implemented,
+   * BackdropStreamWrapperInterface requires that these methods be implemented,
    * but none of them apply to a read-only stream wrapper. On failure they
    * are expected to return FALSE.
    */
@@ -98,7 +98,7 @@ class ModuleSystemStreamWrapper extends SystemStreamWrapper {
    * Implements abstract public function getDirectoryPath()
    */
   public function getDirectoryPath() {
-    return drupal_get_path('module', $this->getSystemName());
+    return backdrop_get_path('module', $this->getSystemName());
   }
 }
 
@@ -117,10 +117,10 @@ class ThemeSystemStreamWrapper extends SystemStreamWrapper {
       return $GLOBALS['theme'];
     }
     elseif ($name == 'default') {
-      return variable_get('theme_default', 'stark');
+      return config_get('system.core','theme_default');
     }
     elseif ($name == 'admin') {
-      return variable_get('admin_theme', variable_get('theme_default', 'stark'));
+      return config_get('system.core','admin_theme');
     }
     else {
       return $name;
@@ -131,7 +131,7 @@ class ThemeSystemStreamWrapper extends SystemStreamWrapper {
    * Implements abstract public function getDirectoryPath()
    */
   public function getDirectoryPath() {
-    return drupal_get_path('theme', $this->getSystemName());
+    return backdrop_get_path('theme', $this->getSystemName());
   }
 }
 
@@ -146,7 +146,7 @@ class ProfileSystemStreamWrapper extends SystemStreamWrapper {
   protected function getSystemName($uri = NULL) {
     $name = parent::getSystemName($uri);
     if ($name == 'current') {
-      return drupal_get_profile();
+      return backdrop_get_profile();
     }
     else {
       return $name;
@@ -157,7 +157,7 @@ class ProfileSystemStreamWrapper extends SystemStreamWrapper {
    * Implements abstract public function getDirectoryPath()
    */
   public function getDirectoryPath() {
-    // We cannot use drupal_get_path() here as it actually doesn't work if
+    // We cannot use backdrop_get_path() here as it actually doesn't work if
     // $type is 'profile'.
     // @see http://drupal.org/node/1006714
     if ($profile = $this->getSystemName()) {
