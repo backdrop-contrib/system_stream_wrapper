@@ -3,10 +3,13 @@
 /**
  * Implements hook_autoload_info().
  */
-  
 function system_stream_wrapper_autoload_info() {
   return array(
-    'ModuleSystemStreamWrapper' => 'SystemStreamWrapper.inc',
+    'SystemStreamWrapper' => 'includes/SystemStreamWrapper.inc',
+    'ModuleSystemStreamWrapper' => 'includes/SystemStreamWrapper.inc',
+    'ThemeSystemStreamWrapper' => 'includes/SystemStreamWrapper.inc',
+    'ProfileSystemStreamWrapper' => 'includes/SystemStreamWrapper.inc',
+    'LibrarySystemStreamWrapper' => 'includes/SystemStreamWrapper.inc',
   );
 }
 
